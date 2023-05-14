@@ -1,0 +1,47 @@
+---
+title: "GSE179983_diff_exp_stdy"
+author: Cinzia Benetti 
+date:
+output: html_document
+toc: true
+---
+
+#Introduction
+
+##Rationale:
+
+Intratumoral heterogeneity is one of the main causes of why targeted therapies, despite being quite promising from a theoretical point of view,
+end up in untreatable and multiresistant relapses in patients. The study of cancer evolution has brough scientists to the conclusion that the intratumoral
+heterogeneity can assume different forms, and is more often than not a mixture of pre-existing and acquired features.
+
+![](images/1-s2.0-S0304419X17300197-gr1.jpg)
+
+Recently, the punctuated evolution and the neutral evolution models have been appointed as the ones reflecting tumor heterogeneity the most, and have been confirmed on over
+30% of TCGA Dataset. According to these models, a short burst of clones in the beginnig can turn into the expansion of some, and the co-existence of several branches at the same time.
+Also, the predominat clone can result either from the short, initial burst, or from subsiquently generated heterogeneity.
+
+Heterogeneity can have different forms. It can be genetic heterogeneity, altough that only explains a small part of how  tumor progresses in patients. The concept of the existence of persister cells,
+ displaying non-genetic heterogeneity, is now something accepted even into the clinical setting. There exist now plenty of signatures, which can predict based on differential expression of genes, the potential patient outcome or some features of the tumor.
+One of these signatures, the one with which I am most familiar thanks to the reaserch project performed in my laboratory, is the [Cancer cell intrinsic signature(CRIS)](https://www.nature.com/articles/ncomms15107), a cancer cell intrinsic signature which has been used in pre-clinical models to stratify patients and tumors into different categories.
+Thanks to scRNAseq approaches, the occurrence of heterogeneusly classified cells inside the same tumor has been demonstrated, proving once again the existence of this kind of heterogeneity.
+
+A courios aspect of CRIS classifier, is that based on the molecular profile, aspects of tumor microenvironment and ECM can be predicted as well, suggesting a relationship between transcriptional heterogeneity and matrix features heterogeneity.
+
+I chose this project as the main topic is assessing how tumor heterogeneity can impact on ECM, and if any link can be found between ECM stiffness level and RNAseq data, as to get insights on how this can impact on heterogeneity and, ultimately, patient outcome
+  
+##STIFmap project
+
+The analyzed dataset is part of a project carried out by UCSC surgery department, directed by Valerie M Weaver with the collaboration of Stashko C. and Northey J.
+Under the direction of Weaver V. surgery department, 3 patients of Breast cancer had their tumor collected and analyzed with STIFmap, a convolutional neural network.
+
+Spatially Transformed Inferential Force Map (STIFMap) exploits computer vision to precisely automate atomic force microscopy (AFM) indentation combined with a trained convolutional neural network to predict stromal elasticity with micron-resolution using collagen morphological features and ground truth AFM data.
+
+With this kind of technology,stromal stiffness can be measured and quantified on in-vivo tumors, investigating tumoral heterogeneity and the relationship with tumoral progression, in a visual way.
+
+The resulting data was then compared to RNAsequencing data, as to identify potential markers and features which could explain the observed differences from a molecular point of view
+
+Resources and project description can also be found [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi).
+
+#Dataset features
+#Results
+#Discussion
