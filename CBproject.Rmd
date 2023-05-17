@@ -1,14 +1,18 @@
 ---
 title: "GSE179983_diff_exp_stdy"
-author: Cinzia Benetti 
+author: Cinzia Benetti
 date:
-output: html_document
-toc: true
+output:
+   html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    number_sections: true
 ---
 
-#Introduction
+# Introduction
 
-##Rationale:
+## Rationale
 
 Intratumoral heterogeneity is one of the main causes of why targeted therapies, despite being quite promising from a theoretical point of view,
 end up in untreatable and multiresistant relapses in patients. The study of cancer evolution has brough scientists to the conclusion that the intratumoral
@@ -20,16 +24,42 @@ Recently, the punctuated evolution and the neutral evolution models have been ap
 30% of TCGA Dataset. According to these models, a short burst of clones in the beginnig can turn into the expansion of some, and the co-existence of several branches at the same time.
 Also, the predominat clone can result either from the short, initial burst, or from subsiquently generated heterogeneity.
 
-Heterogeneity can have different forms. It can be genetic heterogeneity, altough that only explains a small part of how  tumor progresses in patients. The concept of the existence of persister cells,
- displaying non-genetic heterogeneity, is now something accepted even into the clinical setting. There exist now plenty of signatures, which can predict based on differential expression of genes, the potential patient outcome or some features of the tumor.
-One of these signatures, the one with which I am most familiar thanks to the reaserch project performed in my laboratory, is the [Cancer cell intrinsic signature(CRIS)](https://www.nature.com/articles/ncomms15107), a cancer cell intrinsic signature which has been used in pre-clinical models to stratify patients and tumors into different categories.
-Thanks to scRNAseq approaches, the occurrence of heterogeneusly classified cells inside the same tumor has been demonstrated, proving once again the existence of this kind of heterogeneity.
+Heterogeneity can have different forms. The most widely observed is genetic heterogeneity, altough it  only explains a small part of how  tumor progresses in patients. The concept of the existence of persister cells,
+ displaying non-genetic heterogeneity, is now something accepted and widely demonstrated [Huang S. et al](https://doi.org/10.1038/nrg2556). Since the large-scale diffusion of RNAsequencing technologies, a wide number of transcriptional classifiers have been investigated, as to try to predict, based on differential gene expression, the potential patient outcome or some features of the tumor.
+Among the most robust classifiers, we find examples such as the CRIS classifier for colorectal cancer [Isella et al.](https://doi.org/10.1038/ncomms15107), or PAM-50 classifier for breast cancer [Parker, J. S. et al.](https://doi.org/10.1200/jco.2008.18.1370)
 
-A courios aspect of CRIS classifier, is that based on the molecular profile, aspects of tumor microenvironment and ECM can be predicted as well, suggesting a relationship between transcriptional heterogeneity and matrix features heterogeneity.
+Thanks to scRNAseq approaches, the occurrence of heterogeneusly classified cells inside the same tumor has been demonstrated.
+Combination of genetic, non genetic, aquired or pre-existing heterogeneity can give rise to a multitude of phenotypes, each with its own specific feature. However, another major source of
+intratumoral dishomogeneity can be appointed to features related to ECM and microenvironment components as well.
 
-I chose this project as the main topic is assessing how tumor heterogeneity can impact on ECM, and if any link can be found between ECM stiffness level and RNAseq data, as to get insights on how this can impact on heterogeneity and, ultimately, patient outcome
-  
-##STIFmap project
+
+## ECM heterogeneity
+### Its role in the tumoral landscape
+
+Composition, posttranslational modifications, and organization of the ECM are dynamically regulated. Cells sense
+the biochemical and mechanical properties of the ECM through
+specialized transmembrane receptors that include integrins, discoidin domain receptors (DDRs), and syndecans.ECM composition, density, organization, and posttranslational modifications
+including cleavage and cross-linking dictate the material property or viscoelasticity, e.g., stiffness of the stroma. Biochemical and mechanical properties
+of the ECM exquisitely tune the growth, survival, migration, invasion, and differentiation of cells within the tissue to influence their
+fate and regulate tissue development, phenotype, and homeostasis. As a confirm of the importance of the characteristics of the ECM components, in most cancer types we can find some form of alteration of 
+in organization or mechanical properties of ECM. This can lead to inflamation, fibroblast expansion and activation, angiogenesis disregulation and a stiff and crosslinked tumor stroma.
+
+All of these processes directly ragulate tumor ability to grow, disseminate, extravasate and, eventually, metastatize.
+For example, a stiffened ECM has been related to a mechanical stress on the tumor cells which, while potentially interfering with tumor growth, increases the mechanical stress which in turn promotes EMT and  a  dysfunctional vasculature  which facilitates intravasation [Leventhal et al,](http://refhub.elsevier.com/S1534-5807(19)30237-0/sref62)[Neve et al.](http://refhub.elsevier.com/S1534-5807(19)30237-0/sref77)
+The way in which this ECM disregulation happens are not yet fully understood. While several research focus on how cancer cells can directly influence tumoral microenvironment and EMT by  secretion of proteins, the ability of ECM to signal and modify transcriptional profile of cells has to be taken into account as well.
+To support such observations, we find  in literature many classifiers, which allow patient stratification trough  molecular classifiers in which  different subsets can be discriminated according o EMT related differentially expressed genes, such as the one published by [Peng Y. et al.](https://doi.org/10.3389%2Ffimmu.2021.666137)
+
+Taking into account ECM features during the therapy decision making process, or even directly targetting ECM features could be new frontiers  in cancer treatment. However, this requires a more in-depth investigation of regulation of ECM  subtypes and the relative modulators, other than observing how intratumoral ECM heterogeneity contributes to the global characteristics of the tumor.
+
+![*Overview of Inhibitors that Perturb Cell-ECM Interactions and/or Adhesion Signaling that May Have Applications for the Treatment
+of Metastatic Cancers*](images/gr4.jpg)
+
+## STIFmap project
+
+In breast cancer, a stron g correlation has been found between extracellular matrix stiffening and invasiveness and aggressiveness of tumor. [Acerbi I. et al.](https://doi.org/10.1039/c5ib00040h)
+Nevertheless, classification of stiff regions in tumor samples proves to be difficult due to the elevated heterogeneity among the samples.
+
+A general method to measure stiffness is the use of  nanoscale Atomic Force Microscopy (AFM), a technique which measures elasticity of collagen fiber  thanks to the measuremet of the occurring forces between  the tip of the probe and the sample, calculated according to the tip deflection.
 
 The analyzed dataset is part of a project carried out by UCSC surgery department, directed by Valerie M Weaver with the collaboration of Stashko C. and Northey J.
 Under the direction of Weaver V. surgery department, 3 patients of Breast cancer had their tumor collected and analyzed with STIFmap, a convolutional neural network.
@@ -38,10 +68,44 @@ Spatially Transformed Inferential Force Map (STIFMap) exploits computer vision t
 
 With this kind of technology,stromal stiffness can be measured and quantified on in-vivo tumors, investigating tumoral heterogeneity and the relationship with tumoral progression, in a visual way.
 
-The resulting data was then compared to RNAsequencing data, as to identify potential markers and features which could explain the observed differences from a molecular point of view
+Classified tumor tissue was then collected and  engrafted on a Patient derived xenograph (PDX).
+In this way, informations about tumor stiffness could be compared  to RNAsequencing data, as to identify potential markers and features which could explain the observed differences from a molecular point of view, while also taking into account the intratumoral heterogeneity of each patient.
 
 Resources and project description can also be found [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi).
 
-#Dataset features
-#Results
-#Discussion
+# Dataset features
+
+## Description
+
+The GSE179983 dataset is available on [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE179983) database. It's a serie of 18 human derived samples, engrafted into PDX.
+From each of the 3 patients enrolled in the STIFmap project at UCSC Weaver Lab, both stiff and soft tumor samples were collected, as to mantain the intratumoral heterogeneity features. Samples coming from the same patient but with different stromal composition were each split into 3 groups, as to generate 3 replicates, and each replicate was engrafted in a PDX, for a total of 6 PDX for patient, half with stiff stromal composition and half with a soft one.
+
+The resulting 18 samples are part of the [GPL24676 platform](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL24676). meaning they all were sequenced by High troughput Illumina NovaSeq 6000 for human samples, during the year 2018.
+RNAseq fastq files were mapped to the primary assembly of the Gencode v33 human genome using Rsubread (version 2.0.1) and counted using featureCounts, with Genome_build:hs33
+RNA was isolated using TRIzol (Invitrogen, Cat. : 15596018) followed by chloroform extraction. RNAseq library preparation and sequencing was performed by the Vincent J. Coates Genomics Sequencing Laboratory, University of California, Berkeley. Samples were sequenced in NovaSeq 6000 S4 lanes with 150bp paired-end reads with approximately 25 million read pairs per sample
+Dataset is available as a raw count matrix, without any information regarding transcript length.
+
+It can be downloaded and inspected as follows
+
+## Download and inspection
+
+The file can be downloaded to be submitted to the pipeline by following instructions on the (Initialization script)[]
+
+First, dataset is downloaded and unzipped
+
+```{r}
+setwd("Dataset/")
+#system("wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE179nnn/GSE179983/suppl/GSE179983_pdx_hs33_counts.txt.gz")
+#system("gunzip GSE179983_pdx_hs33_counts.txt.gz")
+setwd("../")
+cat(system("head Dataset/GSE179983_pdx_hs33_counts.txt",intern=TRUE),sep ='\n')
+```
+
+As we can see, the raw data counts are distribuited in 18 columns of a csv file. First column contains ENSEMBLE ID of gene,first row contains the sample name. To associate each sample with its feature
+from the collecion of [BioSamples accessions](https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&from_uid=746133) on NCBI database, for which a [summary]  has been ddownloaded in txt format,
+
+```{r}
+cat(system("head Dataset/GSE179983_biosample.txt",intern=TRUE),sep ='\n')
+```
+# Results
+# Discussion
