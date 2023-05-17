@@ -1,0 +1,89 @@
+1. Breast tumor 2, stiff gel, rep3 [H12805]
+Identifiers:	BioSample: SAMN20181906; SRA: SRS9465962; GEO: GSM5444459
+Organism:	Homo sapiens
+Accession: SAMN20181906	ID: 20181906
+
+2. Breast tumor 3, stiff gel, rep2 [B43303]
+Identifiers:	BioSample: SAMN20181905; SRA: SRS9465967; GEO: GSM5444464
+Organism:	Homo sapiens
+Accession: SAMN20181905	ID: 20181905
+
+3. Breast tumor 3, stiff gel, rep3 [B43304]
+Identifiers:	BioSample: SAMN20181904; SRA: SRS9465968; GEO: GSM5444465
+Organism:	Homo sapiens
+Accession: SAMN20181904	ID: 20181904
+
+4. Breast tumor 3, soft gel, rep1 [B43202]
+Identifiers:	BioSample: SAMN20181903; SRA: SRS9465963; GEO: GSM5444460
+Organism:	Homo sapiens
+Accession: SAMN20181903	ID: 20181903
+
+5. Breast tumor 3, soft gel, rep2 [B43203]
+Identifiers:	BioSample: SAMN20181902; SRA: SRS9465964; GEO: GSM5444461
+Organism:	Homo sapiens
+Accession: SAMN20181902	ID: 20181902
+
+6. Breast tumor 3, soft gel, rep3 [B43204]
+Identifiers:	BioSample: SAMN20181901; SRA: SRS9465965; GEO: GSM5444462
+Organism:	Homo sapiens
+Accession: SAMN20181901	ID: 20181901
+
+7. Breast tumor 3, stiff gel, rep1 [B43104]
+Identifiers:	BioSample: SAMN20181900; SRA: SRS9465966; GEO: GSM5444463
+Organism:	Homo sapiens
+Accession: SAMN20181900	ID: 20181900
+
+8. Breast tumor 1, soft gel, rep1 [B63703]
+Identifiers:	BioSample: SAMN20181899; SRA: SRS9465951; GEO: GSM5444448
+Organism:	Homo sapiens
+Accession: SAMN20181899	ID: 20181899
+
+9. Breast tumor 1, soft gel, rep2 [B63704]
+Identifiers:	BioSample: SAMN20181898; SRA: SRS9465952; GEO: GSM5444449
+Organism:	Homo sapiens
+Accession: SAMN20181898	ID: 20181898
+
+10. Breast tumor 1, soft gel, rep3 [B63705]
+Identifiers:	BioSample: SAMN20181897; SRA: SRS9465953; GEO: GSM5444450
+Organism:	Homo sapiens
+Accession: SAMN20181897	ID: 20181897
+
+11. Breast tumor 1, stiff gel, rep1 [B63801]
+Identifiers:	BioSample: SAMN20181896; SRA: SRS9465954; GEO: GSM5444451
+Organism:	Homo sapiens
+Accession: SAMN20181896	ID: 20181896
+
+12. Breast tumor 1, stiff gel, rep2 [B63802]
+Identifiers:	BioSample: SAMN20181895; SRA: SRS9465955; GEO: GSM5444452
+Organism:	Homo sapiens
+Accession: SAMN20181895	ID: 20181895
+
+13. Breast tumor 1, stiff gel, rep3 [B63803]
+Identifiers:	BioSample: SAMN20181894; SRA: SRS9465956; GEO: GSM5444453
+Organism:	Homo sapiens
+Accession: SAMN20181894	ID: 20181894
+
+14. Breast tumor 2, soft gel, rep1 [H12701]
+Identifiers:	BioSample: SAMN20181893; SRA: SRS9465957; GEO: GSM5444454
+Organism:	Homo sapiens
+Accession: SAMN20181893	ID: 20181893
+
+15. Breast tumor 2, soft gel, rep2 [H12702]
+Identifiers:	BioSample: SAMN20181892; SRA: SRS9465958; GEO: GSM5444455
+Organism:	Homo sapiens
+Accession: SAMN20181892	ID: 20181892
+
+16. Breast tumor 2, soft gel, rep3 [H12703]
+Identifiers:	BioSample: SAMN20181891; SRA: SRS9465959; GEO: GSM5444456
+Organism:	Homo sapiens
+Accession: SAMN20181891	ID: 20181891
+
+17. Breast tumor 2, stiff gel, rep1 [H12802]
+Identifiers:	BioSample: SAMN20181890; SRA: SRS9465960; GEO: GSM5444457
+Organism:	Homo sapiens
+Accession: SAMN20181890	ID: 20181890
+
+18. Breast tumor 2, stiff gel, rep2 [H12804]
+Identifiers:	BioSample: SAMN20181889; SRA: SRS9465961; GEO: GSM5444458
+Organism:	Homo sapiens
+Accession: SAMN20181889	ID: 20181889
