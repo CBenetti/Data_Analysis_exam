@@ -36,10 +36,10 @@
 	tmp <- unlist(lapply(pd,function(x){gsub("\\]","",strsplit(x,", ")[[1]][3])}))
 	name <- unlist(lapply(tmp, function(x){strsplit(x," \\[")[[1]][2]}))
 	rep <- unlist(lapply(tmp, function(x){strsplit(x," \\[")[[1]][1]}))
-	phenoD <- t(data.frame(stroma=factors(stroma),patient=factors(tumor),replicate=factors(rep)))
-	colnames(phenoD) <- name
+	phenoD <- data.frame(stroma=factor(stroma),patient=factor(tumor),replicate=factor(rep))
+	rownames(phenoD) <- name
 	colnames(ds) <- unlist(lapply(colnames(ds),function(x){strsplit(x,"\\.")[[1]][1]}))
-	phenoD <- phenoD[,colnames(ds)]
+	phenoD <- phenoD[colnames(ds),]
 
 ##Building ExpressionSet
 
