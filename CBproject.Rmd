@@ -101,11 +101,64 @@ setwd("../")
 cat(system("head Dataset/GSE179983_pdx_hs33_counts.txt",intern=TRUE),sep ='\n')
 ```
 
-As we can see, the raw data counts are distribuited in 18 columns of a csv file. First column contains ENSEMBLE ID of gene,first row contains the sample name. To associate each sample with its feature
-from the collecion of [BioSamples accessions](https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&from_uid=746133) on NCBI database, for which a [summary]  has been ddownloaded in txt format,
+As we can see, the raw data counts are distribuited in 18 columns of a csv file. First column contains versioned Ensembl id of genes,first row contains the sample name. Annotations for each sample 
+can be obtained from the collecion of [BioSamples accessions](https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&from_uid=746133) on NCBI database, for which a 
+[summary](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Dataset/GSE179983_biosample.txt) has been downloaded in txt format
 
 ```{r}
 cat(system("head Dataset/GSE179983_biosample.txt",intern=TRUE),sep ='\n')
 ```
+
+We can see here as each patient is associated to a tumor (tumor 1,2 or 3),each sample is either classified as stiff or soft, to annotate the results from STIFmap analysis, and different repliates 
+are present for each patient tumor type.
+
+## ExpressionSet initialization
+
+As to procede into further analysis of the data, the Geneset must be loaded into R environment, annotations should be integrated in a was as to match the original sample set, Gene names 
+attribuited to each Ensembl id, and counts normalized. Each of these results is produced by sourcing the [import script](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Scripts/01_import.R) from the main folder in R.
+The starting point is the DataFrame ds, loaded in R environment as
+
+```{r}
+ds <- read.table("Dataset/GSE179983_pdx_hs33_counts.txt", sep=",", header=T, row.names=1)
+dim(ds)
+head(ds)
+
+```
+The raw count table is to be considered a Dataframe with 18 columns and 60721 rowns, corresponding to the 18 samples and with a total of 60721 mapped ids.
+
+### Recovery of Gene names
+
+This is important to allow the correct interpretation of the final results. Converting each Ensembl id into Gene names is possible thanks to the Bioconductor package 
+[ensembldb](https://bioconductor.org/packages/release/bioc/html/ensembldb.html),
+in which a filter framework can be used to retrieve annotations from Ensembl database. 
+The genome build used to map fastq files was Gencode v33, which corresponds to [GRCh38.p13](https://www.gencodegenes.org/human/release_33.html) assembly.
+
+According to [Ensembl assembly specifics](https://www.ensembl.org/info/website/archives/assembly.html), GRCh38.p13 is covered by Ensembl versions spanning from 98 to 109. V99 was chosen for this 
+project. To be able to map Ensembl id, the versioning has been removed.
+
+### ExpressionSet initialization
+
+The ExpressionSet to be submitted for further analyis was initialized with [Biobase](http://bioconductor.org/packages/release/bioc/html/Biobase.html) tools.
+A total of 3 Expressionset was built, one for the raw counts, one for the cpm normalized counts and one for the log2 normalized counts, obtained as follows
+
+```{r}
+library(edgeR)
+counts <- cpm(ds)
+logcounts <- cpm(ds,prior.count=1,log=TRUE)
+```
+The final object is a list of ExpressionSets, each`with the same number of rowns and columns of the original dataset, and annotated with phenoData containing information on the stroma, the patient 
+and the replicate identifier, and featureData with ene names and de-versioned Ensembl ids.
+
+```{r}
+library(Biobase)
+load("Dataset/GSE179983.rda")
+GSE179983$count
+pData(GSE179983$count)
+dim(fData(GSE179983$count))
+head(fData(GSE179983$count))
+```
+With this set of data, it is possible to procede to the analyisis on the differential gene expression between samples with different stromal stiffness and evaluate the impact of intratumoral 
+heterogeneity on the results.
+
 # Results
 # Discussion
