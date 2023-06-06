@@ -50,3 +50,14 @@
 	draw(ht2 %v% ht3, ht_gap=unit(0.6,"cm"))
 
 	dev.off()
+
+###
+p1 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor1" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor1"& pData(GSE179983$log)$stroma =="soft")])})
+p2 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor2" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor2"& pData(GSE179983$log)$stroma =="soft")])})
+p3 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="soft")])})
+plot(p1,p2)
+plot(p1,p3)
+plot(p2,p3)
+ dev.off()
+
+table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)])
