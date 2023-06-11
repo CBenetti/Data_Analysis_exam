@@ -54,7 +54,7 @@ probs=seq(0,1,0.05))[16])]
 	dev.off()
 
 ###Assesment of heterogeneity and relationship between patients
-	pdf("Scripts/Relationship_among_patients.pdf")
+	pdf("Results/Relationship_among_patients.pdf")
 	p1 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor1" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor1"& pData(GSE179983$log)$stroma =="soft")])})
 	p2 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor2" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor2"& pData(GSE179983$log)$stroma =="soft")])})
 	p3 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="soft")])})
