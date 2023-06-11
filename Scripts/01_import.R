@@ -51,7 +51,8 @@
         ids <- as.vector(main$gene_id_version)
         sym <- as.vector(main$symbol)         
 	sym <- unlist(lapply(sym, function(x){paste(c(x,"_PAR_Y"),collapse="")}))
-        Tx[ids] <- sym
+        ids <- unlist(lapply(ids, function(x){paste(c(x,"_PAR_Y"),collapse="")}))
+	Tx[ids] <- sym
 	bio <- as.vector(main$gene_biotype)
 	biotype[ids] <- bio
 	names(biotype) <- NULL

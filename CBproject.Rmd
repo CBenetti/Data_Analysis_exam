@@ -81,7 +81,7 @@ The GSE179983 dataset is available on [Gene Expression Omnibus (GEO)](https://ww
 From each of the 3 patients enrolled in the STIFmap project at UCSC Weaver Lab, both stiff and soft tumor samples were collected, as to mantain the intratumoral heterogeneity features. Samples coming from the same patient but with different stromal composition were each split into 3 groups, as to generate 3 replicates, and each replicate was engrafted in a PDX, for a total of 6 PDX for patient, half with stiff stromal composition and half with a soft one.
 
 The resulting 18 samples are part of the [GPL24676 platform](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL24676). meaning they all were sequenced by High troughput Illumina NovaSeq 6000 for human samples, during the year 2018.
-RNAseq fastq files were mapped to the primary assembly of the Gencode v33 human genome using Rsubread (version 2.0.1) and counted using featureCounts, with Genome_build:hs33
+RNAseq fastq files were mapped to the primary assembly of the Gencode v33 human genome using Rsubread (version 2.0.1) and counted using featureCounts, with Genome_build:hs33.
 RNA was isolated using TRIzol (Invitrogen, Cat. : 15596018) followed by chloroform extraction. RNAseq library preparation and sequencing was performed by the Vincent J. Coates Genomics Sequencing Laboratory, University of California, Berkeley. Samples were sequenced in NovaSeq 6000 S4 lanes with 150bp paired-end reads with approximately 25 million read pairs per sample
 Dataset is available as a raw count matrix, without any information regarding transcript length.
 
@@ -93,16 +93,22 @@ The file can be downloaded to be submitted to the pipeline by following instruct
 
 First, dataset is downloaded and unzipped
 
-```{r}
+```{r eval=FALSE}
 setwd("Dataset/")
-#system("wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE179nnn/GSE179983/suppl/GSE179983_pdx_hs33_counts.txt.gz")
-#system("gunzip GSE179983_pdx_hs33_counts.txt.gz")
+system("wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE179nnn/GSE179983/suppl/GSE179983_pdx_hs33_counts.txt.gz")
+system("gunzip GSE179983_pdx_hs33_counts.txt.gz")
 setwd("../")
+```
+
+This is required only when importing the dataset the first time and if the Dataset folder has not yet been downloaded. For this reason, in the script these lines have been commented
+
+```{r}
 cat(system("head Dataset/GSE179983_pdx_hs33_counts.txt",intern=TRUE),sep ='\n')
 ```
 
-As we can see, the raw data counts are distribuited in 18 columns of a csv file. First column contains versioned Ensembl id of genes,first row contains the sample name. Annotations for each sample 
-can be obtained from the collecion of [BioSamples accessions](https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&from_uid=746133) on NCBI database, for which a 
+As we can see, the raw data counts are distribuited in 18 columns of a csv file. First column contains versioned Ensembl id of genes,first row contains the sample name. Column names correspond 
+to BAM file names of each samples but are not representative of sample annotations.
+Annotations for each sample can be obtained from the collecion of [BioSamples accessions](https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&from_uid=746133) on NCBI database, for which a 
 [summary](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Dataset/GSE179983_biosample.txt) has been downloaded in txt format
 
 ```{r}
@@ -112,10 +118,15 @@ cat(system("head Dataset/GSE179983_biosample.txt",intern=TRUE),sep ='\n')
 We can see here as each patient is associated to a tumor (tumor 1,2 or 3),each sample is either classified as stiff or soft, to annotate the results from STIFmap analysis, and different repliates 
 are present for each patient tumor type.
 
-## ExpressionSet initialization
+## Dataset processing
 
 As to procede into further analysis of the data, the Geneset must be loaded into R environment, annotations should be integrated in a was as to match the original sample set, Gene names 
 attribuited to each Ensembl id, and counts normalized. Each of these results is produced by sourcing the [import script](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Scripts/01_import.R) from the main folder in R.
+
+```{r}
+source("Scripts/01_import.R")
+```
+
 The starting point is the DataFrame ds, loaded in R environment as
 
 ```{r}
@@ -126,15 +137,141 @@ head(ds)
 ```
 The raw count table is to be considered a Dataframe with 18 columns and 60721 rowns, corresponding to the 18 samples and with a total of 60721 mapped ids.
 
+To assign annotation to each sample, the following pece of code is used to read lines of the annotation file, match the sample name to the correct line, and then deconstruct it to get
+information about the patient, the stromal stiffnes and the replicate.
+
+```{r}
+##phenoData annotation
+        
+pd <- readLines("Dataset/GSE179983_biosample.txt")
+pd<-pd[seq(1,90,5)]
+tumor <- unlist(lapply(pd,function(x){strsplit(strsplit(x,"Breast ")[[1]][2],", ")[[1]][1]}))
+tumor <- gsub(" ","",tumor)
+stroma <- unlist(lapply(pd,function(x){strsplit(strsplit(x,", ")[[1]][2]," gel")[[1]][1]}))
+tmp <- unlist(lapply(pd,function(x){gsub("\\]","",strsplit(x,", ")[[1]][3])}))
+name <- unlist(lapply(tmp, function(x){strsplit(x," \\[")[[1]][2]}))
+rep <- unlist(lapply(tmp, function(x){strsplit(x," \\[")[[1]][1]}))
+phenoD <- data.frame(stroma=factor(stroma),patient=factor(tumor),replicate=factor(rep))
+rownames(phenoD) <- name
+colnames(ds) <- unlist(lapply(colnames(ds),function(x){strsplit(x,"\\.")[[1]][1]}))
+phenoD <- phenoD[colnames(ds),]
+phenoD
+```
+We can see that now, annotations match the sample names in the column of the dataframe
+
+```{r}
+colnames(ds)
+```
 ### Recovery of Gene names
 
 This is important to allow the correct interpretation of the final results. Converting each Ensembl id into Gene names is possible thanks to the Bioconductor package 
 [ensembldb](https://bioconductor.org/packages/release/bioc/html/ensembldb.html),
-in which a filter framework can be used to retrieve annotations from Ensembl database. 
+in which a filter framework can be used to retrieve annotations from Ensembl database. To download the correct version of the Ensembldb, the package 
+[AnnotationHub](https://bioconductor.org/packages/release/bioc/html/AnnotationHub.html) was used
 The genome build used to map fastq files was Gencode v33, which corresponds to [GRCh38.p13](https://www.gencodegenes.org/human/release_33.html) assembly.
 
 According to [Ensembl assembly specifics](https://www.ensembl.org/info/website/archives/assembly.html), GRCh38.p13 is covered by Ensembl versions spanning from 98 to 109. V99 was chosen for this 
-project. To be able to map Ensembl id, the versioning has been removed.
+project. 
+
+All of the packages required for the analysis are already installed in the docker, as per the instructions on the 
+[Dockerfile](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Docker/Dockerfile)
+Informations on how to build, download or use the docker can be found on the [Docker](https://github.com/CBenetti/Data_Analysis_exam/tree/main/Docker) folder on github, and more detailed 
+instructions are provided in the relative [README.md](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Docker/README.md) file.
+
+With the following code, after the library loading the download of the Ensembldb takes place. Since the download is done automatically inside the R cache folder, this has to be created first, 
+acoording to the architecture in use.
+
+```{r}
+library(ensembldb)
+library(AnnotationHub)
+#Download an annotation version compatible with Genome assembly hs33
+        if(!file.exists(getAnnotationHubOption("CACHE"))){
+                here<-getwd()
+                setwd("~")
+                home <- unlist(strsplit(getwd(),"/"))
+                obj <- unlist(strsplit(getAnnotationHubOption("CACHE"),"/"))
+                abs <- obj[which(match(obj,home, nomatch=0)==0)]
+                for(i in 1:length(abs)){dir<-paste(abs[c(1:i)],collapse="/");if(!file.exists(dir)){dir.create(dir)}}
+                setwd(here)
+        }
+        ah <- AnnotationHub()
+        ahDb <- query(ah, pattern = c("Homo Sapiens", "EnsDb", 99))
+        ahEdb <- ahDb[[1]]
+
+genes(ahEdb)
+
+```
+The genes() function can be used to visualize the fields of the object. Our main fields of interest are the gene_id_version, which corresponds to the versioned Ensembl ids provided in the raw 
+data table, symbols and gene_biotype.
+
+>**NOTE** When downloading the database for the first time, it might require some time. To shorten the rendering time, sourcing code 01_import.R before rendering would allow to retrieve the files from cache when executing the render() function
+
+Usually, the query of the ahEdb objec is done trough filtering for de-versioned id. However, since here we dispose of versioned ids, which have the advantage of being univoque, an alternative 
+procedure was put in place to obtain information directly from gene_id_version, altough it isn't available as a filter. Also, we should consider that the ahEdb object is not a dataframe, and 
+thus it should not be subsetted as such.
+First, we check wether there are any unmapped ids.
+
+```{r}
+rownames(ds)[which(match(rownames(ds),genes(ahEdb)$gene_id_version,nomatch=0)==0)]
+```
+Unmatching ids are related to ids for which _PAR_Y suffix was applied.
+According to Ensembl database, the IDs with  _PAR_Y suffix do not exist, but they seem to be related to pseudoautosoomal genes, thus genes related to X and Y chromosomes, which can be aligned to 
+both as a result of their proximity to crossing over hotspots. By defaul, in ensembldb such genes are aligned to X chromosome. As a matter of fact, ids without the suffix are already present in 
+the geneset and can be ascribed to regions on the X chromosomes.
+
+```{r}
+        tmp <- unlist(lapply(rownames(ds)[which(match(rownames(ds),genes(ahEdb)$gene_id_version,nomatch=0)==0)],function(x){strsplit(x,"_")[[1]][1]}))
+        tmp%in%rownames(ds)
+```
+As to not completely exclude them from the analysis, symbols are assigned on the base of the X aligned id, excluding the suffix from the query for the subset of unmatching genes 
+
+```{r}
+        Tx <- vector(length=length(rownames(ds)))
+        biotype <- vector(length=length(rownames(ds)))
+        names(Tx) <- rownames(ds)
+        names(biotype) <- rownames(ds)
+        
+        #Assigning symbols for Id's which match
+        main <- genes(ahEdb)[which(match(genes(ahEdb)$gene_id_version,rownames(ds)[which(match(rownames(ds),genes(ahEdb)$gene_id_version,nomatch=0)>0)],nomatch=0)>0)]
+        ids <- as.vector(main$gene_id_version)
+        sym <- as.vector(main$symbol)
+        Tx[ids] <- sym
+        bio <- as.vector(main$gene_biotype)
+        biotype[ids] <- bio
+        
+        #Assigning symbols for IDs which don't
+        main <- genes(ahEdb)[which(match(genes(ahEdb)$gene_id_version,tmp,nomatch=0)>0)]
+        ids <- as.vector(main$gene_id_version)
+        sym <- as.vector(main$symbol)
+        sym <- unlist(lapply(sym, function(x){paste(c(x,"_PAR_Y"),collapse="")}))
+	ids <- unlist(lapply(ids, function(x){paste(c(x,"_PAR_Y"),collapse="")}))
+        Tx[ids] <- sym
+        bio <- as.vector(main$gene_biotype)
+        biotype[ids] <- bio
+        names(biotype) <- NULL
+        names(Tx)<- NULL
+```
+
+At this point, Tx contains the gene symbols associated to the ensemblids in the rownames of the dataset
+
+```{r}
+head(Tx)
+head(rownames(ds))
+```
+
+To identify the presence of duplicated genes, the following lines of code retrieve the position of duplicated symbols and uses the corresponding ids to retrieve information on said genes, which 
+is then saved. in this way, we can procede with the analysis with the totality of the genes, and only filtering them out in case they appear as differentially expressed.
+
+```{r}
+        #Info on duplicated symbols
+        dup <- Tx[which(duplicated(Tx)==TRUE)]
+        info_on_duplicated_id <- genes(ahEdb)[which(match(genes(ahEdb)$gene_id_version,rownames(ds)[ which(Tx%in%dup ==TRUE)],nomatch=0)>0),]
+        save(info_on_duplicated_id,file="Results/Duplicated_id_info.rda")
+
+length(Tx[which(duplicated(Tx)==TRUE)])
+head(info_on_duplicated_id)
+```
+As we can see, duplicated genes are only 34, and they mainly display differences in the starting or ending position
 
 ### ExpressionSet initialization
 
@@ -151,7 +288,23 @@ and the replicate identifier, and featureData with ene names and de-versioned En
 
 ```{r}
 library(Biobase)
-load("Dataset/GSE179983.rda")
+
+        minimalSet <- ExpressionSet(assayData=as.matrix(ds))
+        phenoData(minimalSet) <- new("AnnotatedDataFrame",data=phenoD)
+        featureData(minimalSet) <- new("AnnotatedDataFrame",data=data.frame(Geneid=Tx, Biotype=biotype))
+        counts <- cpm(ds)
+        logcounts <- log(counts+1,2)
+        countset <- ExpressionSet(assayData=as.matrix(counts))
+        phenoData(countset) <- new("AnnotatedDataFrame",data=phenoD)
+        featureData(countset) <- new("AnnotatedDataFrame",data=data.frame(Geneid=Tx,Biotype=biotype))
+        logc <- ExpressionSet(assayData=as.matrix(logcounts))
+        phenoData(logc) <- new("AnnotatedDataFrame",data=phenoD)
+        featureData(logc) <- new("AnnotatedDataFrame",data=data.frame(Geneid=Tx,Biotype=biotype))
+
+
+        GSE179983 <- list(minimal = minimalSet,count = countset, log = logc)
+	save(GSE179983, file="Dataset/GSE179983.rda")	
+
 GSE179983$count
 pData(GSE179983$count)
 dim(fData(GSE179983$count))
@@ -161,4 +314,289 @@ With this set of data, it is possible to procede to the analyisis on the differe
 heterogeneity on the results.
 
 # Results
+
+The overall design of the analysis involves a differential expression analysis between stromal stiff and stromal soft tumors, in order to understand whether there is any driver or effector which 
+triggers or has been triggered from the different environments in which cells are embedded. A biological investigation of the results completes the picture, as to investigate biological 
+processes which may be involved in the differential stromal composition, but also to evaluate if our experimental design had any biological coherence at all.
+Results for each step of the analysis were saved as pdf images in the [Results](https://github.com/CBenetti/Data_Analysis_exam/tree/main/Results) folder in the Github repository, by means of pdf 
+calling before plot generation in each of the R script.
+
+>**Example**
+```{r eval=FALSE}
+pdf("Results/plot.pdf")
+
+#image or plot generation
+
+dev.off()
+```
+
+## Data visualization and dimensional reduction
+
+Since we are considering an expressionset with more than 60000 features, dimensional reduction is required to visualize the data and allow to make observations on the dataset before performing 
+any analysis. For this reason, a comparison between a pca and tsne plot seemed as the most reasonable approach.
+Analysis can be run by sourcing [02_dimensional_reduction_plot.R](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Scripts/02_dimensional_reduction_plot.R) file from the 
+Data_analysis_exam folder.
+
+```{r}
+source("Scripts/02_dimensional_reduction_plot.R")
+```
+
+### PCA
+
+PCA is the most informative dimensonal reduction technique, allowing to make observations according on the amount of variance explained by each of the components. In this kind of graph, the 
+spread along the axis with the higher variance explained is representative of the highest source of variability between samples. We can hence try to propose a biological interpretation on the 
+basis of the annotation data associated to each sample.
+
+For the analysis, the [prcomp](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp) function is used, and since it's already present in the R base pool of function, no 
+additional package has to be loaded from our library.
+
+The expressionset in use for the dimenctional reduction refers to normalized and logaritmic form of the data, as per the requirements of the function. Data must be transposed, as we want to 
+perform reduction on genes, as to represent each sample as a point in a bidimensional space. This is true for both tsne and pca
+
+```{r eval=FALSE}
+library(Biobase)
+load("Dataset/GSE179983.rda")
+```
+```{r}
+pca <- prcomp(t(exprs(GSE179983$log)))
+```
+
+From the Scree plot of the explained variance, we understand how much variance is explained by each component. A succesful PCA should have an exponential decrease in the variance explained by 
+each successive component.
+
+```{r}
+x <- factor(colnames(summary(pca)$importance), levels=colnames(summary(pca)$importance))
+barplot(summary(pca)$importance[2,]*100,names.arg=x, las=2, ylab="Variance proportion (%)", main="Scree plot", col="darkcyan")
+```
+
+From this Scree plot, a significative reduction of explained variance can be observed, with little to no variance explained after PC10. The amount of variance explained by ther first principal 
+component however does not reach 40%, suggesting a somehow complex picture.
+
+```{r fig.height=9, fig.width=9}
+plot(pca$x[,1],pca$x[,2], col=pData(GSE179983$log)$stroma,pch=c(rep(16,6),rep(17,6),rep(18,6)),xlab=paste(c("PC 1",summary(pca)$importance[2,1]*100,"%"),collapse=" "), ylab =paste(c("PC 2",summary(pca)$importance[2,2]*100,"%"),collapse=" "), main="PCA GSE179983")
+legend("top",col=c(rep(1,3),rep(2,3)),pch=rep(c(17,18,16),2), legend = c("Tumor 1, soft","Tumor 2, soft","Tumor 3, soft","Tumor 1, stiff","Tumor 2, stiff","Tumor 3, stiff"))
+```
+
+The plot provides functional annotations regarding the stromal type and the patient from which samples were collected.
+There is a distinct separations between samples from patient 3 and all others, suggesting this patient could hold some heterogeneity features which distingush him from all others. Also, the 
+biggest separation occurs for a couple of stromal stiff samples, either pointing them out as outliers or due to a greater similarity in the mechanisms in which stromal stiffnes was achieved.
+Overall, no clear separation between stromal stiff and stromal soft sample could be observed.
+
+### tsne
+
+To better focus on the grouping and similarities within samples, tsne dimensional reduction was employed. Rtsne packege for R is required
+In this case, we cannot get informations on how the variance is spread, however we can have a greater insight on how much samples are similar between each other.
+To exclude variability associated to random number generation, seed was randomly set to allow for reproducibility.
+Perplexity, the abiliy of a tsne to try and capture the bigger picture behind the distribution of the data, was set to 5, as the optimal range for perplexity should be between 5 and 50, and 
+given the low dimensionality of our dataset, 5 is close to the maximum perplexity allowed for the system
+
+```{r fig.height=9,fig.width=9}
+set.seed(666)
+tsne <- Rtsne(t(exprs(GSE179983$log)), perplexity=5)
+plot(tsne$Y[,1],tsne$Y[,2], col=pData(GSE179983$log)$stroma,pch=c(rep(16,6),rep(17,6),rep(18,6)),xlab="tsne1", ylab ="tsne2", main="tsne GSE179983")
+legend("top",col=c(rep(1,3),rep(2,3)),pch=rep(c(17,18,16),2), legend = c("Tumor 1, soft","Tumor 2, soft","Tumor 3, soft","Tumor 1, stiff","Tumor 2, stiff","Tumor 3, stiff"))
+```
+
+In tsne, we can see better how samples tend to cluster according to the patient, rather than for the stromal composition. Again, patient 1 and 2 seem to share more similarty as they are 
+closer, however with tsne we better evaluate similarity than distance, so we have no information on how different are elements which are more distant. Again, two samples from stromal stiff 
+tumors of patient 1 and 2 seem to display a closer similarity.
+With tsne, we can also observe how within each cluster, some sort of separation between stromal stiff and soft tumors exists. However, differences among patients seem to prevaricate over 
+differences in stromal stiffness. Thus, when performing differential expression analysis, these things should be accounted for in the design formula.
+
+## Differential expression analysis
+
+Diffrential expression can be performed by sourcing [03_differential_expression.R](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Scripts/03_differential_expression.R).
+
+### Differential gene expression
+
+For the differential expression analysis, [DESeq2](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) package is used. During a differential 
+expression analysis, differentially expressed genes are found according to a glm 
+model. In this case, the model has to take into account both the condition of interest (stromal stiffnes vs stromal softness) and the patient from which the sample has been collected, to 
+account from batch effect due to the patient.
+
+For this kind of analysis, the raw data format is required, since the function already filters and normalized the data by setting a minimum level of expression and normalizing for sequencing 
+depth (lib.size).
+
+```{r}
+###library
+        library(edgeR)
+        library(Biobase)
+	library(DESeq2)
+	dds <- DESeqDataSetFromMatrix(countData = exprs(GSE179983$minimal), colData = data.frame(condition=pData(GSE179983$minimal)$stroma,group=pData(GSE179983$minimal)$patient),design = ~ group + condition )
+```
+The first step is to create a DESeq2 object, which is fit for the analyisis. In this object, we also specify the formula of the design. In the formula, group stands for the patient of 
+appartenence. Putting this term as first, as suggested by DESeq2 guidelines, allows to build a background encompassing all the differences between each patient and than creating a baseline. 
+The second term is the the condition of interest. In the Expressionset structure, pData was already initialized as a factor, which is the form in which these annotations should be used in 
+the formula, to be used in a logistic regression.
+
+The DESeq2 object is then used for the analysis.
+
+```{r}
+        res <- DESeq(dds)
+	summary(results(res))
+```
+Result of the analysis is a set of genes, for which LogFC and padj has been computed. A positive LogFC, according from the experimental design, corresponds to genes which are more expressed 
+by the stromal stiff samples than from the soft stromal samples.
+From the summary of the results, we see that only 5 of the genes have a negative LogFC. The overall mean expression is <3, meaning the mayority of genes has a relatively low expression. 43% 
+of genes was already filtered for displaying a low cout, while 2% were considered as outliers. Genes with a positive LogFC and a pvalue < 0.1 were approximately 1.3% 
+
+Criteria for filtering have been developed also on the basis of the distribution of the logFC over the gene mean expression values. Genes which have an expression of 0 or close to it, 
+display an high LogFC in function of the fact that dividing by zero in a logaritm provides very high value, in spite of an actual significative differential expression. 
+
+```{r fig.height=8, fig.width=8}
+        plot(results(res)$baseMean[which(results(res)$padj<0.05)],results(res)$log2FoldChange[which(results(res)$padj<0.05)],xlab="Mean expression",ylab="log2FC",main="Singnificative genes (padj < 0.05)")
+```
+
+From the distribution of genes with a padj < 0.05, we see that all of the genes have a LogFC > 0. We also see that most of them have a mean expression close to 0.
+
+```{r fig.height=8, fig.width=8}
+	plot(results(res)$baseMean[which(results(res)$padj<0.05)],results(res)$log2FoldChange[which(results(res)$padj<0.05)],xlim=c(0,1000),xlab="Mean expression",ylab="log2FC",main="Singnificative genes (padj < 0.05)")
+        abline(v=quantile(results(res)$baseMean,seq(0,1,0.05))[20], col="blue")
+        abline(v=quantile(results(res)$baseMean,seq(0,1,0.05))[18], col="yellow")
+        abline(v=quantile(results(res)$baseMean,seq(0,1,0.05))[17], col="green")
+        abline(v=quantile(results(res)$baseMean,seq(0,1,0.05))[16], col="red")
+        legend("top","left",pch=16,col=c("blue","yellow","green","red"),legend=c("90%","85%","80%","75%"))
+```
+
+Zooming in the region close to 0, we can better see the distribution of the genes. Different cutoffs can be chosen according to the distribution of the mean around different quantiles. 75% 
+quantile seems as the most conservative choice but strict enough as to be able to exclude genes with mean too close to 0.  
+
+According to this distribution, genes with LogFC>3, padj<0.05 and mean expression higher than 75 percentile were considered as differentially expressed
+
+```{r}
+        higher_in_stiff <- rownames(results(res))[which(results(res)$padj < 0.05 & results(res)$log2FoldChange > 3 & results(res)$baseMean>quantile(results(res)$baseMean,probs=seq(0,1,0.05))[16])]
+        red <- exprs(GSE179983$log)[higher_in_stiff,]
+        hstiff <- fData(GSE179983$log)$Geneid[which(match(rownames(exprs(GSE179983$log)),higher_in_stiff,nomatch=0)>0)]
+```
+
+We can than make sure that among the differentially expressed genes there are none of those with duplicated symbols
+
+```{r}
+unique(unlist(info_on_duplicated_id$symbol))%in%hstiff
+```
+
+Also, none of the differentially expressed gene is among the list of pseudoautosomal genes.
+
+```{r}
+tmp <- unlist(lapply(rownames(ds)[which(match(rownames(ds),genes(ahEdb)$gene_id_version,nomatch=0)==0)],function(x){strsplit(x,"_")[[1]][1]}))
+tmp%in%hstiff
+``` 
+
+### Results interpretation
+
+By using only the differentially expressed genes to perform a dimensional reduction of the data, the improvement on separation between stromal stiff and soft samples can be investigated. For 
+this reason, a tsne was used, with a perplexity of 4 since the dimensionality of the data was now firther reduced. Again, a seed was set as to remove variability appointed to the random 
+initialization of the procedure.
+
+
+```{r fig.height=8, fig.width=8}
+set.seed(9999)
+       tsne <- Rtsne(t(red),perplexity=4)
+       plot(tsne$Y[,1],tsne$Y[,2], col=pData(GSE179983$log)$stroma,pch=c(rep(16,6),rep(17,6),rep(18,6)),xlab="tsne1", ylab ="tsne2", main="tsne GSE179983")
+       legend("bottom",col=c(rep(1,3),rep(2,3)),pch=rep(c(17,18,16),2), legend = c("Tumor 1, soft","Tumor 2, soft","Tumor 3, soft","Tumor 1, stiff","Tumor 2, stiff","Tumor 3, stiff"))
+```
+
+The results do not improve the separation between stromal and stiff samples, with the exception of a small subgroup of samples from patient 1 and 2. Separation of samples from patient 3 is 
+still evident enough.
+This could suggest that a lot of heterogeneity occurs among the cells in each condition and in each patient.
+
+To further look into this hypotesis, an heatmap is built for a better visualization of the results, comparing differentially expressed genes of stromal stiff and soft samples.
+Heatmap is built by visualizing log expression of the genes on mean log expression ratio. To genes more expressed than the mean we assign red colors, while the opposite is true for genes 
+with expression lower than the mean.
+
+```{r fig.width=10, fig.height=13}
+	library(circlize)
+        library(ComplexHeatmap)
+	heat <- t(apply(exprs(GSE179983$log),1,function(x){x-mean(x)}))
+        toc <- pData(GSE179983$log)
+        toc <- toc[order(toc$patient),]
+        toc <- toc[order(toc$stroma),]
+        heat <- heat[,rownames(toc)]
+        col_fun <- colorRamp2(c(-2, 0, 2), c("blue", "white", "red"))
+        ha = rowAnnotation( genes=anno_text(hstiff, gp = gpar(fontsize = 1),show_name = TRUE))
+        ht1 <- HeatmapAnnotation(Classification = anno_text(toc$patient, gp=gpar(fontsize=8,fill=c(rep("darkseagreen2",9),rep("coral3",9)))))
+        ht2 <- Heatmap(heat[higher_in_stiff,], cluster_columns= FALSE, cluster_rows = FALSE, show_column_names=FALSE,show_row_names=FALSE, col=col_fun,top_annotation = ht1,heatmap_legend_param = list(col_fun = col_fun),left_annotation=ha)
+        ht3 <- Heatmap(heat[which(match(rownames(heat),higher_in_stiff,nomatch=0)==0),],name = "Gene expression", cluster_columns=FALSE, cluster_rows = FALSE, show_row_names=FALSE,show_column_names=FALSE, col=col_fun,show_heatmap_legend=FALSE, heatmap_height=unit(5,"cm"))
+	plot(ht2 %v% ht3, ht_gap=unit(0.6,"cm"))
+```
+
+By considering differentially expressed genes (on the top) we can see how the distinction between stiff and soft samples is not evident at a first glance. 
+ Samples from patient 2 seem to display more stiff features , even in the group of samples classified as soft. Such genes seem to be strongly overexpressed, while the remaining genes for 
+those samples seem to be less expressed with respect of the mean of the cells. This could be explainable by a higher overall level of stiffnes, in which the cells completely 
+prioritize stiffness related pathways over any other. On the other hand, cells with a lower expression of such genes display a higher overall expression of genes unrelated to stromal 
+characteristics.
+Of note, we see that saturation of stiffness related genes in samples from color 2, makes cells with lower expression less scalable, interfering with the ability to see more subtle changes 
+with an heatmap.
+
+Relationships between samples can further be investigated by performing clustering on samples based on the differentially expressed genes. this is allowed thhanks to the hclust function of 
+base R, which is used by the ComplexHeatmap package to build the plots by setting the cluster_columns parameter to true.
+
+```{r fig.height=9, fig.width=10}
+ht2 <- Heatmap(heat[higher_in_stiff,], cluster_columns= TRUE, cluster_rows = FALSE, show_column_names=FALSE,show_row_names=FALSE, col=col_fun,top_annotation = ht1,heatmap_legend_param = list(col_fun = col_fun),left_annotation=ha)
+plot(ht2)
+```
+
+After the clustering we see how samples from patients 2 and 1 seem to be closer with respect to samples from patient 3, which cluster all togheter in a single separate cluster, which is more 
+similar to the samples of patient 1 and 2 with a lower stiffness. Again, we can see a definite cluster made by stiff samples of tumor 1 and 2.
+
+Similarity between patients can also be evaluated by confronting overall gene expression between samples of different patients.
+
+```{r}
+	p1 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor1" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor1"& pData(GSE179983$log)$stroma =="soft")])})
+        p2 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor2" & pData(GSE179983$log)$stroma=="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor2"& pData(GSE179983$log)$stroma =="soft")])})
+        p3 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma=="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="soft")])})
+        plot(p1,p2)
+        plot(p1,p3)
+        plot(p2,p3)
+```
+
+We see that relationship of mean value of tumor 3 with both tumor 1 and 2sample is all but linear. Insead, between samples from patient 1 and 2 there is a bit more coherence, with mean gene 
+expression values for each gene having a higher degree of similarity. 
+
+Overall, these finding suggest that sample 3 might have different pathways in which it stromal stiffness is elicited, while we can work more on the comparisons of patient 1 and 2.
+
+## Functional enrichment
+
+To identify biological function and features of the genes considered as differentially expressed, gene biotype is retrieved as to get an overall view of the identity of the genes.
+
+```{r}
+	table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)])
+        barplot(table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)]), las=2, col=colors(12))
+```
+
+As we can see, the majority of the features fall under the category of pseudogenes. This could be explained by the experimental procedure used to design the experiment. Samples were 
+implanted onto PDX models. Stroma, in the case of PDX, is of murine origin when only cancer cells are transplanted. During the retrieve of the tissue for sequencing, and expecially since ths 
+is a bulk analysis, stromal cells are not separated from cancer ones. Since sequencing data was only aligned to human genome, this could mean that pseudogenes are deriving from murine 
+misaligned transcripts. Also, we see so many pseudogenes in the differential list due to the fact that the conditions in the differential expression analysis refers exactly to the difference 
+in stromal composition. This would hence classify murine related stromal genes as genes with a great variability among the observed conditions.
+
+To eliminate this bias, also as pseudogenes would not be mapped in repositories of human related gene features, before proceding into the functional enrichment analysis, pseudogenes were 
+excluded.
+
+A list of genes to be submitted for the functional analysis was generated and stored in the Results folder
+
+```{r}
+writeLines(fData(GSE179983$count)$Geneid[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0 & !grepl("pseudogene",fData(GSE179983$count)$Biotype))],con="Results/differentially_expressed_list.txt")
+```
+
+Stating from [this list](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Results/differentially_expressed_list.txt), entries were copied an pasted on the [g:Profiler 
+website](https://biit.cs.ut.ee/gprofiler/), to perform gOST functional enrichment analysis. gOST is a tool which 
+performs functional enrichment 
+analysis on a series of different databases, inluding the more classical Gene Onthology one, but also other such as KEGG, as to get different kind of functional annotation on the gene.
+
+The following are the results obtained from the analysis tool on the website
+
+```{r}
+fea <- read.table("Results/gProfiler_hsapiens_08-06-2023_17-40-29__intersections.csv", header=TRUE, sep=",")
+dim(fea)
+head(fea)
+table(fea[,1])
+```
+In this table we have all of the results with an adjusted pvalue <0.05 and an ES>1. We see how we have results mostly from Gene Onthology data but also from Human Phenotype onthology, with 
+also some minor enrichments from Reactome, KEGG pathway, Human Protein Atlas and other database.
+
+For our functional interpretation of the results, Gene Onthology and  KEGG hold the most interesting observations.
+
+
+
 # Discussion

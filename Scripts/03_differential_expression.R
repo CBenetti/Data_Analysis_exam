@@ -12,13 +12,14 @@
 
 ##Deseq object initialization
 
-	dds <- DESeqDataSetFromMatrix(countData = exprs(GSE179983$minimal), colData = data.frame(condition=pData(GSE179983$minimal)$stroma,group=pData(GSE179983$minimal)$patient) ,design = ~ group + condition )
+	dds <- DESeqDataSetFromMatrix(countData = exprs(GSE179983$minimal), colData = data.frame(condition=pData(GSE179983$minimal)$stroma,group=pData(GSE179983$minimal)$patient),design = ~ group + condition )
 	res <- DESeq(dds)
 
 ##Differential results
 
 	summary(results(res))
-	higher_in_stiff <- rownames(results(res))[which(results(res)$padj < 0.05 & results(res)$log2FoldChange > 3 & results(res)$baseMean>quantile(results(res)$baseMean, probs=seq(0,1,0.05))[16])]
+	higher_in_stiff <- rownames(results(res))[which(results(res)$padj < 0.05 & results(res)$log2FoldChange > 3 & results(res)$baseMean>quantile(results(res)$baseMean, 
+probs=seq(0,1,0.05))[16])]
 	red <- exprs(GSE179983$log)[higher_in_stiff,]
 	hstiff <- fData(GSE179983$log)$Geneid[which(match(rownames(exprs(GSE179983$log)),higher_in_stiff,nomatch=0)>0)]
 	heat <- t(apply(exprs(GSE179983$log),1,function(x){x-mean(x)}))	
@@ -29,7 +30,8 @@
 	col_fun <- colorRamp2(c(-2, 0, 2), c("blue", "white", "red"))
 	ha = rowAnnotation( genes=anno_text(hstiff, gp = gpar(fontsize = 1),show_name = TRUE))
 	ht1 <- HeatmapAnnotation(Classification = anno_text(toc$patient, gp=gpar(fontsize=8,fill=c(rep("darkseagreen2",9),rep("coral3",9)))))
-	ht2 <- Heatmap(heat[higher_in_stiff,], cluster_columns=FALSE, cluster_rows = FALSE, show_column_names=FALSE,show_row_names=FALSE, col=col_fun,top_annotation = ht1,heatmap_legend_param = list(col_fun = col_fun),left_annotation=ha)
+	ht2 <- Heatmap(heat[higher_in_stiff,], cluster_columns= TRUE, cluster_rows = FALSE, show_column_names=FALSE,show_row_names=FALSE, col=col_fun,top_annotation = ht1,heatmap_legend_param
+ = list(col_fun = col_fun),left_annotation=ha)
 	ht3 <- Heatmap(heat[which(match(rownames(heat),higher_in_stiff,nomatch=0)==0),],name = "Gene expression", cluster_columns=FALSE, cluster_rows = FALSE, show_row_names=FALSE,show_column_names=FALSE, col=col_fun,show_heatmap_legend=FALSE, heatmap_height=unit(5,"cm"))
 
 
@@ -51,13 +53,27 @@
 
 	dev.off()
 
-###
-p1 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor1" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor1"& pData(GSE179983$log)$stroma =="soft")])})
-p2 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor2" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor2"& pData(GSE179983$log)$stroma =="soft")])})
-p3 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="soft")])})
-plot(p1,p2)
-plot(p1,p3)
-plot(p2,p3)
- dev.off()
+###Assesment of heterogeneity and relationship between patients
+	pdf("Scripts/Relationship_among_patients.pdf")
+	p1 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor1" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor1"& pData(GSE179983$log)$stroma =="soft")])})
+	p2 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor2" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor2"& pData(GSE179983$log)$stroma =="soft")])})
+	p3 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor3" & pData(GSE179983$log)$stroma =="soft")])})
+	plot(p1,p2)
+	plot(p1,p3)
+	plot(p2,p3)
+	ht2 <- Heatmap(heat[higher_in_stiff,], cluster_columns= TRUE, cluster_rows = FALSE, show_column_names=FALSE,show_row_names=FALSE, col=col_fun,top_annotation = ht1,heatmap_legend_param = list(col_fun = col_fun),left_annotation=ha)
+	draw(ht2 %v% ht3, ht_gap=unit(0.6,"cm"))
+	 dev.off()
 
-table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)])
+	table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)])
+
+
+###Functional enrichment analysis
+	##Investigating biotype of differentially expressed genes
+	pdf("Results/biotype.pdf")
+	par(mar=c(15,4.1,4.1,2.1))
+	barplot(table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)]), las=2, col=colors(12))
+	dev.off()
+	writeLines(fData(GSE179983$count)$Geneid[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0 & !grepl("pseudogene",fData(GSE179983$count)$Biotype))],con="Results/differentially_expressed_list.txt")
+	
+
