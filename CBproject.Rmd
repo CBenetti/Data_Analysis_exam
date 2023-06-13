@@ -1,5 +1,5 @@
 ---
-title: "GSE179983_diff_exp_stdy"
+title: "Differential expression analysis on the geneset GSE179983: relationship between stromal stiffness and cancer cell features"
 author: Cinzia Benetti
 date:
 output:
@@ -22,11 +22,14 @@ heterogeneity can assume different forms, and is more often than not a mixture o
 
 Recently, the punctuated evolution and the neutral evolution models have been appointed as the ones reflecting tumor heterogeneity the most, and have been confirmed on over
 30% of TCGA Dataset. According to these models, a short burst of clones in the beginnig can turn into the expansion of some, and the co-existence of several branches at the same time.
-Also, the predominat clone can result either from the short, initial burst, or from subsiquently generated heterogeneity.
+Also, the predominat clone can result either from the short, initial burst, or from subsequently generated heterogeneity.
 
 Heterogeneity can have different forms. The most widely observed is genetic heterogeneity, altough it  only explains a small part of how  tumor progresses in patients. The concept of the existence of persister cells,
- displaying non-genetic heterogeneity, is now something accepted and widely demonstrated [Huang S. et al](https://doi.org/10.1038/nrg2556). Since the large-scale diffusion of RNAsequencing technologies, a wide number of transcriptional classifiers have been investigated, as to try to predict, based on differential gene expression, the potential patient outcome or some features of the tumor.
-Among the most robust classifiers, we find examples such as the CRIS classifier for colorectal cancer [Isella et al.](https://doi.org/10.1038/ncomms15107), or PAM-50 classifier for breast cancer [Parker, J. S. et al.](https://doi.org/10.1200/jco.2008.18.1370)
+ displaying non-genetic heterogeneity, is now something accepted and widely demonstrated - [Huang S. et al](https://doi.org/10.1038/nrg2556). Since the large-scale diffusion of RNAsequencing 
+technologies, a wide number of transcriptional classifiers have been investigated, as to try to predict, based on differential gene expression, the potential patient outcome or some features of the tumor.
+Among the most robust classifiers, we find examples such as the CRIS classifier for colorectal cancer - [Isella et al.](https://doi.org/10.1038/ncomms15107) -, or PAM-50 classifier for 
+breast 
+cancer -  [Parker, J. S. et al.](https://doi.org/10.1200/jco.2008.18.1370).
 
 Thanks to scRNAseq approaches, the occurrence of heterogeneusly classified cells inside the same tumor has been demonstrated.
 Combination of genetic, non genetic, aquired or pre-existing heterogeneity can give rise to a multitude of phenotypes, each with its own specific feature. However, another major source of
@@ -44,10 +47,11 @@ of the ECM exquisitely tune the growth, survival, migration, invasion, and diffe
 fate and regulate tissue development, phenotype, and homeostasis. As a confirm of the importance of the characteristics of the ECM components, in most cancer types we can find some form of alteration of 
 in organization or mechanical properties of ECM. This can lead to inflamation, fibroblast expansion and activation, angiogenesis disregulation and a stiff and crosslinked tumor stroma.
 
-All of these processes directly ragulate tumor ability to grow, disseminate, extravasate and, eventually, metastatize.
+All of these processes directly regulate tumor ability to grow, disseminate, extravasate and, eventually, metastatize.
 For example, a stiffened ECM has been related to a mechanical stress on the tumor cells which, while potentially interfering with tumor growth, increases the mechanical stress which in turn promotes EMT and  a  dysfunctional vasculature  which facilitates intravasation [Leventhal et al,](http://refhub.elsevier.com/S1534-5807(19)30237-0/sref62)[Neve et al.](http://refhub.elsevier.com/S1534-5807(19)30237-0/sref77)
 The way in which this ECM disregulation happens are not yet fully understood. While several research focus on how cancer cells can directly influence tumoral microenvironment and EMT by  secretion of proteins, the ability of ECM to signal and modify transcriptional profile of cells has to be taken into account as well.
-To support such observations, we find  in literature many classifiers, which allow patient stratification trough  molecular classifiers in which  different subsets can be discriminated according o EMT related differentially expressed genes, such as the one published by [Peng Y. et al.](https://doi.org/10.3389%2Ffimmu.2021.666137)
+To support such observations, we find  in literature many classifiers, which allow patient stratification through  molecular classifiers in which  different subsets can be discriminated 
+according o EMT related differentially expressed genes, such as the one published by [Peng Y. et al.](https://doi.org/10.3389%2Ffimmu.2021.666137)
 
 Taking into account ECM features during the therapy decision making process, or even directly targetting ECM features could be new frontiers  in cancer treatment. However, this requires a more in-depth investigation of regulation of ECM  subtypes and the relative modulators, other than observing how intratumoral ECM heterogeneity contributes to the global characteristics of the tumor.
 
@@ -61,14 +65,15 @@ Nevertheless, classification of stiff regions in tumor samples proves to be diff
 
 A general method to measure stiffness is the use of  nanoscale Atomic Force Microscopy (AFM), a technique which measures elasticity of collagen fiber  thanks to the measuremet of the occurring forces between  the tip of the probe and the sample, calculated according to the tip deflection.
 
-The analyzed dataset is part of a project carried out by UCSC surgery department, directed by Valerie M Weaver with the collaboration of Stashko C. and Northey J.
-Under the direction of Weaver V. surgery department, 3 patients of Breast cancer had their tumor collected and analyzed with STIFmap, a convolutional neural network.
+The analyzed dataset is part of a project carried out by UCSC surgery department, directed by Valerie M. Weaver with the collaboration of Stashko C. and Northey J.
+Under the direction of Weaver V. surgery department, 3 patients with breast cancer had their tumor collected and analyzed with STIFmap, a convolutional neural network.
 
 Spatially Transformed Inferential Force Map (STIFMap) exploits computer vision to precisely automate atomic force microscopy (AFM) indentation combined with a trained convolutional neural network to predict stromal elasticity with micron-resolution using collagen morphological features and ground truth AFM data.
 
-With this kind of technology,stromal stiffness can be measured and quantified on in-vivo tumors, investigating tumoral heterogeneity and the relationship with tumoral progression, in a visual way.
+With this kind of technology, stromal stiffness can be measured and quantified on in-vivo tumors, investigating tumoral heterogeneity and the relationship with tumoral progression, in a 
+visual way.
 
-Classified tumor tissue was then collected and  engrafted on a Patient derived xenograph (PDX).
+Classified tumor tissue was then collected and  engrafted on a Patient Derived Xenograph (PDX).
 In this way, informations about tumor stiffness could be compared  to RNAsequencing data, as to identify potential markers and features which could explain the observed differences from a molecular point of view, while also taking into account the intratumoral heterogeneity of each patient.
 
 Resources and project description can also be found [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi).
@@ -80,7 +85,8 @@ Resources and project description can also be found [here](https://www.ncbi.nlm.
 The GSE179983 dataset is available on [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE179983) database. It's a serie of 18 human derived samples, engrafted into PDX.
 From each of the 3 patients enrolled in the STIFmap project at UCSC Weaver Lab, both stiff and soft tumor samples were collected, as to mantain the intratumoral heterogeneity features. Samples coming from the same patient but with different stromal composition were each split into 3 groups, as to generate 3 replicates, and each replicate was engrafted in a PDX, for a total of 6 PDX for patient, half with stiff stromal composition and half with a soft one.
 
-The resulting 18 samples are part of the [GPL24676 platform](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL24676). meaning they all were sequenced by High troughput Illumina NovaSeq 6000 for human samples, during the year 2018.
+The resulting 18 samples are part of the [GPL24676 platform](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL24676), meaning they all were sequenced by High throughput Illumina NovaSeq 
+6000 for human samples, during the year 2018.
 RNAseq fastq files were mapped to the primary assembly of the Gencode v33 human genome using Rsubread (version 2.0.1) and counted using featureCounts, with Genome_build:hs33.
 RNA was isolated using TRIzol (Invitrogen, Cat. : 15596018) followed by chloroform extraction. RNAseq library preparation and sequencing was performed by the Vincent J. Coates Genomics Sequencing Laboratory, University of California, Berkeley. Samples were sequenced in NovaSeq 6000 S4 lanes with 150bp paired-end reads with approximately 25 million read pairs per sample
 Dataset is available as a raw count matrix, without any information regarding transcript length.
@@ -115,12 +121,12 @@ Annotations for each sample can be obtained from the collecion of [BioSamples ac
 cat(system("head Dataset/GSE179983_biosample.txt",intern=TRUE),sep ='\n')
 ```
 
-We can see here as each patient is associated to a tumor (tumor 1,2 or 3),each sample is either classified as stiff or soft, to annotate the results from STIFmap analysis, and different repliates 
-are present for each patient tumor type.
+We can see here as each patient is associated to a tumor (tumor 1,2 or 3),each sample is either classified as stiff or soft, to annotate the results from STIFmap analysis, and different 
+replicates are present for each patient tumor type.
 
 ## Dataset processing
 
-As to procede into further analysis of the data, the Geneset must be loaded into R environment, annotations should be integrated in a was as to match the original sample set, Gene names 
+As to procede into further analysis of the data, the dataeset must be loaded into R environment, annotations should be integrated in a was as to match the original sample set, gene names 
 attribuited to each Ensembl id, and counts normalized. Each of these results is produced by sourcing the [import script](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Scripts/01_import.R) from the main folder in R.
 
 ```{r}
@@ -137,7 +143,7 @@ head(ds)
 ```
 The raw count table is to be considered a Dataframe with 18 columns and 60721 rowns, corresponding to the 18 samples and with a total of 60721 mapped ids.
 
-To assign annotation to each sample, the following pece of code is used to read lines of the annotation file, match the sample name to the correct line, and then deconstruct it to get
+To assign annotation to each sample, the following code is used to read lines of the annotation file, match the sample name to the correct line, and then deconstruct it to get
 information about the patient, the stromal stiffnes and the replicate.
 
 ```{r}
@@ -164,17 +170,17 @@ colnames(ds)
 ```
 ### Recovery of Gene names
 
-This is important to allow the correct interpretation of the final results. Converting each Ensembl id into Gene names is possible thanks to the Bioconductor package 
+This is important to allow the correct interpretation of the final results. Converting each Ensembl id into gene names is possible thanks to the Bioconductor package 
 [ensembldb](https://bioconductor.org/packages/release/bioc/html/ensembldb.html),
 in which a filter framework can be used to retrieve annotations from Ensembl database. To download the correct version of the Ensembldb, the package 
-[AnnotationHub](https://bioconductor.org/packages/release/bioc/html/AnnotationHub.html) was used
+[AnnotationHub](https://bioconductor.org/packages/release/bioc/html/AnnotationHub.html) was used.
 The genome build used to map fastq files was Gencode v33, which corresponds to [GRCh38.p13](https://www.gencodegenes.org/human/release_33.html) assembly.
 
 According to [Ensembl assembly specifics](https://www.ensembl.org/info/website/archives/assembly.html), GRCh38.p13 is covered by Ensembl versions spanning from 98 to 109. V99 was chosen for this 
 project. 
 
 All of the packages required for the analysis are already installed in the docker, as per the instructions on the 
-[Dockerfile](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Docker/Dockerfile)
+[Dockerfile](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Docker/Dockerfile).
 Informations on how to build, download or use the docker can be found on the [Docker](https://github.com/CBenetti/Data_Analysis_exam/tree/main/Docker) folder on github, and more detailed 
 instructions are provided in the relative [README.md](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Docker/README.md) file.
 
@@ -206,10 +212,11 @@ data table, symbols and gene_biotype.
 
 >**NOTE** When downloading the database for the first time, it might require some time. To shorten the rendering time, sourcing code 01_import.R before rendering would allow to retrieve the files from cache when executing the render() function
 
-Usually, the query of the ahEdb objec is done trough filtering for de-versioned id. However, since here we dispose of versioned ids, which have the advantage of being univoque, an alternative 
+Usually, the query of the ahEdb objec is done through filtering for de-versioned id. However, since here we dispose of versioned ids, which have the advantage of being univoque, an 
+alternative 
 procedure was put in place to obtain information directly from gene_id_version, altough it isn't available as a filter. Also, we should consider that the ahEdb object is not a dataframe, and 
 thus it should not be subsetted as such.
-First, we check wether there are any unmapped ids.
+First, we check whether there are any unmapped ids.
 
 ```{r}
 rownames(ds)[which(match(rownames(ds),genes(ahEdb)$gene_id_version,nomatch=0)==0)]
@@ -276,7 +283,7 @@ As we can see, duplicated genes are only 34, and they mainly display differences
 ### ExpressionSet initialization
 
 The ExpressionSet to be submitted for further analyis was initialized with [Biobase](http://bioconductor.org/packages/release/bioc/html/Biobase.html) tools.
-A total of 3 Expressionset was built, one for the raw counts, one for the cpm normalized counts and one for the log2 normalized counts, obtained as follows
+A total of 3 Expressionset objects were built, one for the raw counts, one for the cpm normalized counts and one for the log2 normalized counts, obtained as follows
 
 ```{r}
 library(edgeR)
@@ -347,11 +354,11 @@ PCA is the most informative dimensonal reduction technique, allowing to make obs
 spread along the axis with the higher variance explained is representative of the highest source of variability between samples. We can hence try to propose a biological interpretation on the 
 basis of the annotation data associated to each sample.
 
-For the analysis, the [prcomp](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp) function is used, and since it's already present in the R base pool of function, no 
-additional package has to be loaded from our library.
+For the analysis, the [prcomp](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp) function is used, and since it's already present in the R base pool of functions, 
+no additional package has to be loaded from our library.
 
 The expressionset in use for the dimenctional reduction refers to normalized and logaritmic form of the data, as per the requirements of the function. Data must be transposed, as we want to 
-perform reduction on genes, as to represent each sample as a point in a bidimensional space. This is true for both tsne and pca
+perform reduction on genes, as to represent each sample as a point in a bidimensional space. This is true for both tsne and pca.
 
 ```{r eval=FALSE}
 library(Biobase)
@@ -388,7 +395,7 @@ To better focus on the grouping and similarities within samples, tsne dimensiona
 In this case, we cannot get informations on how the variance is spread, however we can have a greater insight on how much samples are similar between each other.
 To exclude variability associated to random number generation, seed was randomly set to allow for reproducibility.
 Perplexity, the abiliy of a tsne to try and capture the bigger picture behind the distribution of the data, was set to 5, as the optimal range for perplexity should be between 5 and 50, and 
-given the low dimensionality of our dataset, 5 is close to the maximum perplexity allowed for the system
+given the low dimensionality of our dataset, 5 is close to the maximum perplexity allowed for the system.
 
 ```{r fig.height=9,fig.width=9}
 set.seed(666)
@@ -459,7 +466,7 @@ From the distribution of genes with a padj < 0.05, we see that all of the genes 
 ```
 
 Zooming in the region close to 0, we can better see the distribution of the genes. Different cutoffs can be chosen according to the distribution of the mean around different quantiles. 75% 
-quantile seems as the most conservative choice but strict enough as to be able to exclude genes with mean too close to 0.  
+percentile seems as the most conservative choice but strict enough as to be able to exclude genes with mean too close to 0.  
 
 According to this distribution, genes with LogFC>3, padj<0.05 and mean expression higher than 75 percentile were considered as differentially expressed
 
@@ -485,7 +492,7 @@ tmp%in%hstiff
 ### Results interpretation
 
 By using only the differentially expressed genes to perform a dimensional reduction of the data, the improvement on separation between stromal stiff and soft samples can be investigated. For 
-this reason, a tsne was used, with a perplexity of 4 since the dimensionality of the data was now firther reduced. Again, a seed was set as to remove variability appointed to the random 
+this reason, a tsne was used, with a perplexity of 4 since the dimensionality of the data was now further reduced. Again, a seed was set as to remove variability appointed to the random 
 initialization of the procedure.
 
 
@@ -528,7 +535,7 @@ characteristics.
 Of note, we see that saturation of stiffness related genes in samples from color 2, makes cells with lower expression less scalable, interfering with the ability to see more subtle changes 
 with an heatmap.
 
-Relationships between samples can further be investigated by performing clustering on samples based on the differentially expressed genes. this is allowed thhanks to the hclust function of 
+Relationships between samples can further be investigated by performing clustering on samples based on the differentially expressed genes. This is allowed thanks to the hclust function of 
 base R, which is used by the ComplexHeatmap package to build the plots by setting the cluster_columns parameter to true.
 
 ```{r fig.height=9, fig.width=10}
@@ -537,9 +544,10 @@ plot(ht2)
 ```
 
 After the clustering we see how samples from patients 2 and 1 seem to be closer with respect to samples from patient 3, which cluster all togheter in a single separate cluster, which is more 
-similar to the samples of patient 1 and 2 with a lower stiffness. Again, we can see a definite cluster made by stiff samples of tumor 1 and 2.
+similar to the samples of patient 1 and 2 with a lower stiffness. Again, we can see a definite cluster made by 3 stiff samples of tumor 1 and 2.
 
-Similarity between patients can also be evaluated by confronting overall gene expression between samples of different patients.
+Similarity between patients can also be evaluated by confronting how mean gene expression of stiff samples compares to mean gene expression of soft samples between samples of different 
+patients. In this way, we are able to visualize if there is any coherence in the behaviour of the genes in different patients.
 
 ```{r}
 	p1 <- apply(exprs(GSE179983$log),1,function(x){mean(x[which(pData(GSE179983$log)$patient=="tumor1" & pData(GSE179983$log)$stroma =="stiff")])-mean(x[which(pData(GSE179983$log)$patient=="tumor1"& pData(GSE179983$log)$stroma =="soft")])})
@@ -561,16 +569,17 @@ To identify biological function and features of the genes considered as differen
 
 ```{r}
 	table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)])
-        barplot(table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)]), las=2, col=colors(12))
+	par(mar=c(15,4.1,4.1,2.1))
+        barplot(table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)]), las=2, col=colors(12), cex.names=0.75)
 ```
 
 As we can see, the majority of the features fall under the category of pseudogenes. This could be explained by the experimental procedure used to design the experiment. Samples were 
-implanted onto PDX models. Stroma, in the case of PDX, is of murine origin when only cancer cells are transplanted. During the retrieve of the tissue for sequencing, and expecially since ths 
-is a bulk analysis, stromal cells are not separated from cancer ones. Since sequencing data was only aligned to human genome, this could mean that pseudogenes are deriving from murine 
-misaligned transcripts. Also, we see so many pseudogenes in the differential list due to the fact that the conditions in the differential expression analysis refers exactly to the difference 
+implanted onto PDX models. Stroma, in the case of PDX, is of murine origin when only cancer cells are transplanted. During the retrieval of the tissue for sequencing, and expecially since 
+this is a bulk analysis, stromal cells might not be separated from cancer ones. Since sequencing data was only aligned to human genome, this could mean that pseudogenes are deriving from 
+murine misaligned transcripts. Also, we see so many pseudogenes in the differential list due to the fact that the conditions in the differential expression analysis refers exactly to the difference 
 in stromal composition. This would hence classify murine related stromal genes as genes with a great variability among the observed conditions.
 
-To eliminate this bias, also as pseudogenes would not be mapped in repositories of human related gene features, before proceding into the functional enrichment analysis, pseudogenes were 
+To eliminate this bias, also since pseudogenes would not be mapped in repositories of human related gene features, before proceding into the functional enrichment analysis, pseudogenes were 
 excluded.
 
 A list of genes to be submitted for the functional analysis was generated and stored in the Results folder
@@ -579,24 +588,89 @@ A list of genes to be submitted for the functional analysis was generated and st
 writeLines(fData(GSE179983$count)$Geneid[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0 & !grepl("pseudogene",fData(GSE179983$count)$Biotype))],con="Results/differentially_expressed_list.txt")
 ```
 
-Stating from [this list](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Results/differentially_expressed_list.txt), entries were copied an pasted on the [g:Profiler 
+Starting from [this list](https://github.com/CBenetti/Data_Analysis_exam/blob/main/Results/differentially_expressed_list.txt), entries were copied an pasted on the [g:Profiler 
 website](https://biit.cs.ut.ee/gprofiler/), to perform gOST functional enrichment analysis. gOST is a tool which 
-performs functional enrichment 
-analysis on a series of different databases, inluding the more classical Gene Onthology one, but also other such as KEGG, as to get different kind of functional annotation on the gene.
+performs functional enrichment analysis on a series of different databases, inluding the more classical Gene Onthology one, but also other such as KEGG, as to get different kind of functional annotation on the gene.
 
 The following are the results obtained from the analysis tool on the website
 
 ```{r}
-fea <- read.table("Results/gProfiler_hsapiens_08-06-2023_17-40-29__intersections.csv", header=TRUE, sep=",")
+fea <- read.table("Results/gProfiler_hsapiens_11-06-2023_12-10-16__intersections.csv", header=TRUE, sep=",")
 dim(fea)
 head(fea)
+fea$ES <- (fea$intersection_size/fea$query_size)/(fea$term_size/fea$effective_domain_size)
+any(fea$ES<1)
+any(fea$adjusted_p_value>0.05)
+```
+In this table we have all of the results with an adjusted pvalue <0.05 and an ES>1. Enrichment scores are not provided in the csv table provided by the website, but can be calculated 
+according to the data in the table, by calculating the ratio of observed ratio of intersection between the intersection and the genes mapped in the query, and the expected ratio, calculated 
+by the ratio between gene set size and overall gene list.
+
+```{r}
 table(fea[,1])
 ```
-In this table we have all of the results with an adjusted pvalue <0.05 and an ES>1. We see how we have results mostly from Gene Onthology data but also from Human Phenotype onthology, with 
+
+We see how we have results mostly from Gene Onthology data but also from Human Phenotype onthology, with 
 also some minor enrichments from Reactome, KEGG pathway, Human Protein Atlas and other database.
 
 For our functional interpretation of the results, Gene Onthology and  KEGG hold the most interesting observations.
 
+![Most inherent observations](Results/gProfiler_hsapiens_2023-06-11_10-07-02.png)
 
+Among the relevant enriched gene sets, we find mostly citoskeletal and stress fiber components, which bind to actin, troponin T and  which take part in myofibril assembly  and formation of 
+supramolecular complexes. It also seems to reflect apicture of transcriptional misregulation in cancer.
+
+To investigate in more depth which genes are directly involved n such annotations, gProfiler offers a schematic view of how the genes are distributed in the enriched gene sets.
+
+![Gene distribution](Results/gProfiler_hsapiens_2023-06-11_10-09-10.png)
+
+To interpretate the color coading of such graph, the following color coding is applied:
+
+![legend](Results/legend.png) 
+
+Among the genes which are a part of the most enriched gene sets, we find Myosin genes (MYH1,2,3,6,13), which are associated to terms such as  stress fiber formation, 
+mostly by experimental validation (red, dark red), by observation of expression patterns(yellow), or by literature only. Among myosine genes, MYH6 is overall the most represented.
+
+Another highly represented gene is TPM1 or tropomyosin gene, mostly by exprerimental validation or expression pattern.
+
+NEB, TTN, MYL1, DES and TNNC1 are a block of genes strongly associated to supramolecular complex formation, such as contractile fibers and sarcomer formation, which are mostly retained 
+inside of the cytoplasm and bound to organelles, supposedly to hold them in place.
+
+Overall, this picture depicts a situation of mechanical stress but also of mechanical response to stress.
+
+Gene sets related to striated muscle and cardial fibers or conditions were excluded due to the lack of relevance in the setting of this experiment.
 
 # Discussion
+
+Heterogeneity in tumors is a reclaim of the post-targetted therapy era. Failure of targetted aproaches in the last years brought back research on the matter of intratumoral heterogeneity. 
+Concomitantly, appreciation of the criticality of aspects related to the tumor microenvironment in contributing to cancer progression has inspired scientists to further look into the 
+mechanisms in which stromal composition can affect cancer cell features and overall tumor evolution, providing novel paraeters to use durign therapy decision making and prognosis evaluation 
+in the clinics. In this study, the stromal intratumoral heterogeneity of 3 patients affected by breast cancer was evaluated by means of a new technology: STIFmap. With this innovative tool, 
+samples which had been charactherized after resection are classified based on their stromal stiffness, and 3 replicates for each stromal category from each patient are then transplanted into 
+PDX, with the help of murine-derived gels to help mantain the correct stromal architechture. On each sample, bulk RNAsequencing was carried out. Transcripts aligned to human genome build 33 
+were then subjected to differential expression analyisis, as to evaluate the existence of common mechanisms which can help us understand how stromal heterogeneity is acquired, whether 
+specific transcriptional profiles can explain it, or at least what the effects are on cancer cells.
+
+Results point out how it is difficult to ascribe to a single common set of genes the features of stromal heterogeneity. An high inter-patient heterogeneity, confirmed by pca and tsne 
+dimensional reduction of expression profiles of each sample, adds to a complex scenario in which even among samples belonging to the same patient, it is difficult to find a set of 
+differentially expressed genes which are able to explain stromal heterogeneity among samples. After finding differentially expressed genes, obtained by a glm regression model (design = 
+group + condition) after library size normalization and selected over a cutoff of padj < 0.05, LogFC>3 and mean expression > of 75% percentile, we still observe a greater 
+inter-patient variability. The model is not fully able to distinguish in a neat way between patients with heterogeneus stromal composition, as it can be seen on both tsne rappresetation of 
+sample according to differentially expressed genes only, and heatmap visualization of gene expression between the stromal soft and the stromal stiff group. Clustering of samples based on 
+differentially expressed genes, outlines patient 3 samples as a a separate cluster, with patient 2 and 1 displaying a greater level of similarity. However, it can also identify a cluster of 
+stromal stiff samples deriving from patients 1 and 2, which display a much greater level of expression of the differentially expressed genes. Overall, Patient 2 could be described as the one with a 
+higher stiffness level, but in trying to identify more common pathways, comparing Patient 2 to Patient 1 is the more appropriate choiche, also based on the graphs which outline behavoiur of 
+mean gene expression difference among the 2 condition in the same pairnt. While patient 2 and 1 display a somewhat linear pattern, confronting patient 2 and 1 to patient 3 outlies big 
+differences in the behaviour of genes among the 2 categories, again pointing out how the source of the stromal heterogeneity could be different in different patient.
+
+Analysis of differentially expressed genes reveals an abundance of pseudogenes, which could maybe be due to the stromal infiltration of murine cells in the samples, which were not 
+correctly identified due to the lack of alignment with murine genome as well. Functional enrichment analysis of human genes, miRNAs, lncRNA and snRNAs with gOSt reveals a strong functional 
+enrichment of genes related to cytoskeleton, actin and miosine fiber formation, stress fiber localization, formation of sarcomer and in general, a transcriptional misregulation. These 
+findings are consistent with [Leventhal et al](http://refhub.elsevier.com/S1534-5807(19)30237-0/sref62) hypotesis, in which stromal stiffness induces 
+mechanical stress which could be implicated with processes of structural remodelling exploited by cancer cells to 
+migrate, resulting in a higher aggressiveness in spite of their slower growth. Evidences of such mechanical stress are remarkably clear from the functional enrichment analysis results of 
+differentially expressed genes, which are overexpressed in tromal stiff samples.
+
+To conclude, we can consider the STIFmap method a good way to identify mechanically stiff regions, which could be implicated to a higher metastatic potential in 
+light of the features highlighted by differential expression analyisis and subsequent functional enrichment of genes between stromal stiff and soft samples. This however is not enough to 
+identify a common driver of such heterogeneity, due to the high interpatiant and intrapatient heterogeneity levels. 
