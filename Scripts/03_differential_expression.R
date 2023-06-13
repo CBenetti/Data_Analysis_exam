@@ -30,8 +30,7 @@ probs=seq(0,1,0.05))[16])]
 	col_fun <- colorRamp2(c(-2, 0, 2), c("blue", "white", "red"))
 	ha = rowAnnotation( genes=anno_text(hstiff, gp = gpar(fontsize = 1),show_name = TRUE))
 	ht1 <- HeatmapAnnotation(Classification = anno_text(toc$patient, gp=gpar(fontsize=8,fill=c(rep("darkseagreen2",9),rep("coral3",9)))))
-	ht2 <- Heatmap(heat[higher_in_stiff,], cluster_columns= TRUE, cluster_rows = FALSE, show_column_names=FALSE,show_row_names=FALSE, col=col_fun,top_annotation = ht1,heatmap_legend_param
- = list(col_fun = col_fun),left_annotation=ha)
+	ht2 <- Heatmap(heat[higher_in_stiff,], cluster_columns= FALSE, cluster_rows = FALSE, show_column_names=FALSE,show_row_names=FALSE, col=col_fun,top_annotation = ht1,heatmap_legend_param = list(col_fun = col_fun),left_annotation=ha)
 	ht3 <- Heatmap(heat[which(match(rownames(heat),higher_in_stiff,nomatch=0)==0),],name = "Gene expression", cluster_columns=FALSE, cluster_rows = FALSE, show_row_names=FALSE,show_column_names=FALSE, col=col_fun,show_heatmap_legend=FALSE, heatmap_height=unit(5,"cm"))
 
 
@@ -72,7 +71,7 @@ probs=seq(0,1,0.05))[16])]
 	##Investigating biotype of differentially expressed genes
 	pdf("Results/biotype.pdf")
 	par(mar=c(15,4.1,4.1,2.1))
-	barplot(table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)]), las=2, col=colors(12))
+	barplot(table(fData(GSE179983$count)$Biotype[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0)]), las=2, col=colors(12), cex.names=0.75)
 	dev.off()
 	writeLines(fData(GSE179983$count)$Geneid[which(match(rownames(exprs(GSE179983$count)),higher_in_stiff,nomatch=0)>0 & !grepl("pseudogene",fData(GSE179983$count)$Biotype))],con="Results/differentially_expressed_list.txt")
 	
