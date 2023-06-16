@@ -12,19 +12,15 @@ docker pull rocker/r-ubuntu:latest
 To obtain the project directory, a pull from GitHub is required, by doing
 
 ```bash
-git clone CBenetti/Data_Analysis_exam
+personalpathtmp=$(pwd)/Data_Analysis_exam
+git clone https://github.com/CBenetti/Data_Analysis_exam.git
 ```
-
-or
-
-```bash
-wget https://github.com/CBenetti/Data_Analysis_exam.git
-```
-
+In this way, if you are unsure of where the repository has been downloaded, it can be retrieved by the personalpathtmp variable
 
 To obtain all the used packages and build the docker, run
 
 ```bash
+cd $personalpathtmp
 docker build Docker -t exam:v.01.00
 ```
 
@@ -33,7 +29,7 @@ from working directory, which should be the one at [Data_Analysis_exam repositor
 After having built the docker image, it  can be run by
 
 ```bash
-docker run -it -v ~/Data_Analysis_exam:/var/log/Data_Analysis_exam exam:v.01.00
+docker run -it -v $personalpathtmp:/var/log/Data_Analysis_exam exam:v.01.00
 ```
 with this command, the working directory is mounted to the folder. The path of the working directory depends on where the repository was pulled, and should be specified accordingly.
 
@@ -50,4 +46,12 @@ At this point, it can be run by executing
 docker run -it -v ~/Data_Analysis_exam:/var/log/Data_Analysis_exam cbenetti/exam:v.01.00
 ```
 
-as to run it and mount the working directory.
+as to run it and mount the working directory, which should be the one of the repository.
+
+This command is the same as doing
+
+```bash
+docker run -it -v $personalpathtmp:/var/log/Data_Analysis_exam cbenetti/exam:v.01.00
+```
+
+if the repository has already been cloned.
