@@ -1,6 +1,6 @@
 
 # Differential expression analysis on the geneset GSE179983: relationship between stromal stiffness and cancer cell features
-This is the GitHub repository containing all the informations about the exam.
+This is the GitHub repository containing all the information about the exam.
 
 In the main folder you can find the Rmd file, with the instructions to compile an rmarkdown html output. 
 
@@ -14,7 +14,7 @@ The folder contains the txt file downloaded from [GEO](https://www.ncbi.nlm.nih.
 
 ### Scripts/
 
-The folder containing the 3 main Rscripts required for the analyis. Each script is troughfully explained in the rmarkdown file.
+The folder containing the 3 main Rscripts required for the analyis. Each script is throughfully explained in the rmarkdown file.
 
 ### Results/ 
 
