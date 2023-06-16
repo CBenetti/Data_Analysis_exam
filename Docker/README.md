@@ -33,6 +33,7 @@ docker run -it -v $personalpathtmp:/var/log/Data_Analysis_exam exam:v.01.00
 ```
 with this command, the working directory is mounted to the folder. The path of the working directory depends on where the repository was pulled, and should be specified accordingly.
 
+## Downloading the docker image from Docker Hub
 
 Alternatively, the image can be pulled from [Dockerhub](https://hub.docker.com/r/cbenetti/exam) by executing
 
