@@ -28,6 +28,7 @@ Folder containing some useful images used in the rmarkdown.
 To reproduce the analysis, it must be downloaded as follows:
 
 ```bash
+personalpathtmp=$(pwd)/Data_Analysis_exam
 git clone https://github.com/CBenetti/Data_Analysis_exam.git
 ```
 
