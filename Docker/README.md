@@ -4,7 +4,7 @@
 To build, first start from [rocker/r-ubuntu](https://hub.docker.com/r/rocker/r-ubuntu)
 
 ```bash
-docker pull rocker/r-ubuntu:latest"
+docker pull rocker/r-ubuntu:latest
 ```
 
 ## Building the docker
