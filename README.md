@@ -28,15 +28,10 @@ Folder containing some useful images used in the rmarkdown.
 To reproduce the analysis, it must be downloaded as follows:
 
 ```bash
-personalpathtmp=$(pwd)/Data_Analysis_exam
 git clone https://github.com/CBenetti/Data_Analysis_exam.git
-```
-
-To ensure reproducibility, instructions on how to pull or build the Docker environment are available in the [Docker folder](https://github.com/CBenetti/Data_Analysis_exam/tree/main/Docker) 
-as a README.md file.
-After running the docker with the instructions on the Docker folder, working directory is set and analysis sourced as follows:
-
-```bash
+cd Data_Analysis/exam
+docker pull cbenetti/exam:v.01.00
+docker run -it -v $(pwd):/var/log/Data_Analysis_exam cbenetti/exam:v.01.00
 cd var/log/Data_Analysis_exam/
 Rscript Scripts/01_import.R
 Rscript Scripts/02_dimensional_reduction_plot.R
