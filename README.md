@@ -29,7 +29,7 @@ To reproduce the analysis, it must be downloaded as follows:
 
 ```bash
 git clone https://github.com/CBenetti/Data_Analysis_exam.git
-cd Data_Analysis/exam
+cd Data_Analysis_exam
 docker pull cbenetti/exam:v.01.00
 docker run -it -v $(pwd):/var/log/Data_Analysis_exam cbenetti/exam:v.01.00
 cd var/log/Data_Analysis_exam/
