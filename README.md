@@ -25,13 +25,13 @@ The folder containing images and objects as a result of the analysis.
 Folder containing some useful images used in the rmarkdown.
 
 
-To reproduce the analysis, it must be downloaded as follows:
+To reproduce the analysis, the following code can be used to download the repository, pull the docker, run it and run the code needed to obtain results both as pdf files or as an html rmarkdown file:
 
 ```bash
 git clone https://github.com/CBenetti/Data_Analysis_exam.git
 cd Data_Analysis_exam
 docker pull cbenetti/exam:v.01.00
-docker run -it -v $(pwd):/var/log/Data_Analysis_exam cbenetti/exam:v.01.00
+docker run -it -v ${PWD}:/var/log/Data_Analysis_exam cbenetti/exam:v.01.00
 cd var/log/Data_Analysis_exam/
 Rscript Scripts/01_import.R
 Rscript Scripts/02_dimensional_reduction_plot.R
